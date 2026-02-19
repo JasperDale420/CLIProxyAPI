@@ -1,0 +1,42 @@
+# Changelog
+
+## [1.0.2] - 2026-02-18
+
+### Changed
+
+- Port changed from 8001 to 8002 to avoid conflict with Shared-MCP-Server
+
+## [1.0.1] - 2026-02-18
+
+### Added
+
+- Empire-specific README.md with usage guide, model reference, and configuration docs
+- Management UI login instructions and management API examples
+- Troubleshooting section
+
+## [1.0.0] - 2026-02-18
+
+### Changed
+
+- Replaced custom Python/FastAPI AI-Gateway implementation with CLIProxyAPI (v6.8.21)
+- Switched from Python subprocess-based CLI execution to Go-native proxy architecture
+- Port initially set to 8001 (changed to 8002 in v1.0.2)
+
+### Added
+
+- Streaming response support
+- Function calling / tools support
+- Multimodal input support (text and images)
+- Multi-account round-robin load balancing
+- API key authentication
+- Management API and web control panel
+- Support for additional providers: Claude Code, Qwen Code, iFlow
+- Configurable retry logic with quota-exceeded auto-switching
+- OpenAI Responses API compatibility
+
+### Removed
+
+- Custom Python source code (`src/ai_gateway/`)
+- Python test suite (`tests/`)
+- Python build config (`pyproject.toml`)
+- Custom Dockerfile (replaced by CLIProxyAPI's Go-based Dockerfile)

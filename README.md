@@ -1,169 +1,249 @@
-# CLI Proxy API
+# Empire AI Gateway
 
-English | [中文](README_CN.md)
+Unified LLM proxy powered by [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (v6.8.21). Provides a single OpenAI-compatible API endpoint for routing requests to multiple LLM providers using OAuth-authenticated CLI credentials.
 
-A proxy server that provides OpenAI/Gemini/Claude/Codex compatible API interfaces for CLI.
+## Quick Start
 
-It now also supports OpenAI Codex (GPT models) and Claude Code via OAuth.
+```bash
+# Start the gateway
+./cli-proxy-api
 
-So you can use local or multi-account CLI access with OpenAI(include Responses)/Gemini/Claude-compatible clients and SDKs.
+# Verify it's running
+curl -H "Authorization: Bearer empire-ai-gateway-key" http://localhost:8002/v1/models
+```
 
-## Sponsor
+The gateway listens on **port 8002** and exposes an OpenAI-compatible API.
 
-[![z.ai](https://assets.router-for.me/english-4.7.png)](https://z.ai/subscribe?ic=8JVLJQFSKB)
+## Authentication
 
-This project is sponsored by Z.ai, supporting us with their GLM CODING PLAN.
+### API Key
 
-GLM CODING PLAN is a subscription service designed for AI coding, starting at just $3/month. It provides access to their flagship GLM-4.7 model across 10+ popular AI coding tools (Claude Code, Cline, Roo Code, etc.), offering developers top-tier, fast, and stable coding experiences.
+All requests require the API key in the `Authorization` header:
 
-Get 10% OFF GLM CODING PLAN：https://z.ai/subscribe?ic=8JVLJQFSKB
+```
+Authorization: Bearer empire-ai-gateway-key
+```
 
----
+### Provider Credentials
 
-<table>
-<tbody>
-<tr>
-<td width="180"><a href="https://www.packyapi.com/register?aff=cliproxyapi"><img src="./assets/packycode.png" alt="PackyCode" width="150"></a></td>
-<td>Thanks to PackyCode for sponsoring this project! PackyCode is a reliable and efficient API relay service provider, offering relay services for Claude Code, Codex, Gemini, and more. PackyCode provides special discounts for our software users: register using <a href="https://www.packyapi.com/register?aff=cliproxyapi">this link</a> and enter the "cliproxyapi" promo code during recharge to get 10% off.</td>
-</tr>
-<tr>
-<td width="180"><a href="https://www.aicodemirror.com/register?invitecode=TJNAIF"><img src="./assets/aicodemirror.png" alt="AICodeMirror" width="150"></a></td>
-<td>Thanks to AICodeMirror for sponsoring this project! AICodeMirror provides official high-stability relay services for Claude Code / Codex / Gemini CLI, with enterprise-grade concurrency, fast invoicing, and 24/7 dedicated technical support. Claude Code / Codex / Gemini official channels at 38% / 2% / 9% of original price, with extra discounts on top-ups! AICodeMirror offers special benefits for CLIProxyAPI users: register via <a href="https://www.aicodemirror.com/register?invitecode=TJNAIF">this link</a> to enjoy 20% off your first top-up, and enterprise customers can get up to 25% off!</td>
-</tr>
-</tbody>
-</table>
+The gateway proxies to LLM providers using OAuth credentials stored in `~/.cli-proxy-api/`. To add or manage accounts, open the management UI:
 
-## Overview
+```
+http://localhost:8002/management.html
+```
 
-- OpenAI/Gemini/Claude compatible API endpoints for CLI models
-- OpenAI Codex support (GPT models) via OAuth login
-- Claude Code support via OAuth login
-- Qwen Code support via OAuth login
-- iFlow support via OAuth login
-- Amp CLI and IDE extensions support with provider routing
-- Streaming and non-streaming responses
-- Function calling/tools support
-- Multimodal input support (text and images)
-- Multiple accounts with round-robin load balancing (Gemini, OpenAI, Claude, Qwen and iFlow)
-- Simple CLI authentication flows (Gemini, OpenAI, Claude, Qwen and iFlow)
-- Generative Language API Key support
-- AI Studio Build multi-account load balancing
-- Gemini CLI multi-account load balancing
-- Claude Code multi-account load balancing
-- Qwen Code multi-account load balancing
-- iFlow multi-account load balancing
-- OpenAI Codex multi-account load balancing
-- OpenAI-compatible upstream providers via config (e.g., OpenRouter)
-- Reusable Go SDK for embedding the proxy (see `docs/sdk-usage.md`)
+**Management Key:** `empire`
 
-## Getting Started
+From the management UI you can:
 
-CLIProxyAPI Guides: [https://help.router-for.me/](https://help.router-for.me/)
+- Add **Antigravity** accounts (Google OAuth → Gemini, Claude, GPT models)
+- Add **Codex** accounts (Apple OAuth → OpenAI GPT models)
+- Add **Claude Code** accounts (Anthropic OAuth)
+- Add **Gemini CLI** accounts (Google OAuth)
+- View usage statistics and account status
 
-## Management API
+To add accounts via CLI instead:
 
-see [MANAGEMENT_API.md](https://help.router-for.me/management/api)
+```bash
+./cli-proxy-api --antigravity-login    # Antigravity (Gemini/Claude/GPT)
+./cli-proxy-api --codex-login          # Codex (OpenAI GPT)
+./cli-proxy-api --claude-login         # Claude Code
+./cli-proxy-api --gemini-login         # Gemini CLI
+```
 
-## Amp CLI Support
+## Making Requests
 
-CLIProxyAPI includes integrated support for [Amp CLI](https://ampcode.com) and Amp IDE extensions, enabling you to use your Google/ChatGPT/Claude OAuth subscriptions with Amp's coding tools:
+### Endpoint
 
-- Provider route aliases for Amp's API patterns (`/api/provider/{provider}/v1...`)
-- Management proxy for OAuth authentication and account features
-- Smart model fallback with automatic routing
-- **Model mapping** to route unavailable models to alternatives (e.g., `claude-opus-4.5` → `claude-sonnet-4`)
-- Security-first design with localhost-only management endpoints
+```
+POST http://localhost:8002/v1/chat/completions
+```
 
-**→ [Complete Amp CLI Integration Guide](https://help.router-for.me/agent-client/amp-cli.html)**
+### Non-Streaming
 
-## SDK Docs
+```bash
+curl -X POST http://localhost:8002/v1/chat/completions \
+  -H "Authorization: Bearer empire-ai-gateway-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-3-pro-high",
+    "messages": [{"role": "user", "content": "Hello"}]
+  }'
+```
 
-- Usage: [docs/sdk-usage.md](docs/sdk-usage.md)
-- Advanced (executors & translators): [docs/sdk-advanced.md](docs/sdk-advanced.md)
-- Access: [docs/sdk-access.md](docs/sdk-access.md)
-- Watcher: [docs/sdk-watcher.md](docs/sdk-watcher.md)
-- Custom Provider Example: `examples/custom-provider`
+### Streaming
 
-## Contributing
+```bash
+curl -N -X POST http://localhost:8002/v1/chat/completions \
+  -H "Authorization: Bearer empire-ai-gateway-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-3-pro-high",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "stream": true
+  }'
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+### Python
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+```python
+import openai
 
-## Who is with us?
+client = openai.OpenAI(
+    base_url="http://localhost:8002/v1",
+    api_key="empire-ai-gateway-key",
+)
 
-Those projects are based on CLIProxyAPI:
+response = client.chat.completions.create(
+    model="gemini-3-pro-high",
+    messages=[{"role": "user", "content": "Hello"}],
+)
+print(response.choices[0].message.content)
+```
 
-### [vibeproxy](https://github.com/automazeio/vibeproxy)
+### Any OpenAI-Compatible Client
 
-Native macOS menu bar app to use your Claude Code & ChatGPT subscriptions with AI coding tools - no API keys needed
+Point any OpenAI-compatible SDK or tool at the gateway:
 
-### [Subtitle Translator](https://github.com/VjayC/SRT-Subtitle-Translator-Validator)
+| Setting    | Value                              |
+|------------|------------------------------------|
+| Base URL   | `http://localhost:8002/v1`         |
+| API Key    | `empire-ai-gateway-key`           |
+| Model      | Any model from the table below     |
 
-Browser-based tool to translate SRT subtitles using your Gemini subscription via CLIProxyAPI with automatic validation/error correction - no API keys needed
+## Available Models
 
-### [CCS (Claude Code Switch)](https://github.com/kaitranntt/ccs)
+List models dynamically:
 
-CLI wrapper for instant switching between multiple Claude accounts and alternative models (Gemini, Codex, Antigravity) via CLIProxyAPI OAuth - no API keys needed
+```bash
+curl -H "Authorization: Bearer empire-ai-gateway-key" http://localhost:8002/v1/models
+```
 
-### [ProxyPal](https://github.com/heyhuynhgiabuu/proxypal)
+### Antigravity Provider
 
-Native macOS GUI for managing CLIProxyAPI: configure providers, model mappings, and endpoints via OAuth - no API keys needed.
+Authenticated via Google OAuth. Routes to Google, Anthropic, and OpenAI models through the Antigravity platform.
 
-### [Quotio](https://github.com/nguyenphutrong/quotio)
+| Model ID | Description |
+|----------|-------------|
+| `gemini-3-pro-high` | Gemini 3 Pro (high quality) |
+| `gemini-3-pro-image` | Gemini 3 Pro with image generation |
+| `gemini-3-flash` | Gemini 3 Flash (fast) |
+| `gemini-2.5-flash` | Gemini 2.5 Flash |
+| `gemini-2.5-flash-lite` | Gemini 2.5 Flash Lite (fastest) |
+| `claude-sonnet-4-6` | Claude Sonnet 4.6 |
+| `claude-sonnet-4-5` | Claude Sonnet 4.5 |
+| `claude-sonnet-4-5-thinking` | Claude Sonnet 4.5 with extended thinking |
+| `claude-opus-4-6-thinking` | Claude Opus 4.6 with extended thinking |
+| `gpt-oss-120b-medium` | GPT OSS 120B |
 
-Native macOS menu bar app that unifies Claude, Gemini, OpenAI, Qwen, and Antigravity subscriptions with real-time quota tracking and smart auto-failover for AI coding tools like Claude Code, OpenCode, and Droid - no API keys needed.
+### Codex Provider (OpenAI)
 
-### [CodMate](https://github.com/loocor/CodMate)
+Authenticated via Apple OAuth. Routes to OpenAI GPT models.
 
-Native macOS SwiftUI app for managing CLI AI sessions (Codex, Claude Code, Gemini CLI) with unified provider management, Git review, project organization, global search, and terminal integration. Integrates CLIProxyAPI to provide OAuth authentication for Codex, Claude, Gemini, Antigravity, and Qwen Code, with built-in and third-party provider rerouting through a single proxy endpoint - no API keys needed for OAuth providers.
+| Model ID | Description |
+|----------|-------------|
+| `gpt-5` | GPT-5 |
+| `gpt-5-codex` | GPT-5 Codex |
+| `gpt-5-codex-mini` | GPT-5 Codex Mini |
+| `gpt-5.1` | GPT-5.1 |
+| `gpt-5.1-codex` | GPT-5.1 Codex |
+| `gpt-5.1-codex-mini` | GPT-5.1 Codex Mini |
+| `gpt-5.1-codex-max` | GPT-5.1 Codex Max |
+| `gpt-5.2` | GPT-5.2 |
+| `gpt-5.2-codex` | GPT-5.2 Codex |
+| `gpt-5.3-codex` | GPT-5.3 Codex |
+| `gpt-5.3-codex-spark` | GPT-5.3 Codex Spark |
 
-### [ProxyPilot](https://github.com/Finesssee/ProxyPilot)
+### MackingJAI (ChatGPT Desktop App)
 
-Windows-native CLIProxyAPI fork with TUI, system tray, and multi-provider OAuth for AI coding tools - no API keys needed.
+Routes through the ChatGPT macOS desktop app via [MackingJAI](https://github.com/0ssamaak0/MackingJAI). **No rate limits** — uses your ChatGPT subscription directly.
 
-### [Claude Proxy VSCode](https://github.com/uzhao/claude-proxy-vscode)
+> **Requires:** MackingJAI.app running + [Apple Shortcut installed](https://www.icloud.com/shortcuts/753cd6efc8fb49918817e107f12a0420) + ChatGPT desktop app running.
 
-VSCode extension for quick switching between Claude Code models, featuring integrated CLIProxyAPI as its backend with automatic background lifecycle management.
+| Model ID | Description |
+|----------|-------------|
+| `chatgpt` | GPT-5 via ChatGPT desktop (no rate limits) |
+| `chatgpt-unlimited` | GPT-5 via ChatGPT desktop (alias) |
 
-### [ZeroLimit](https://github.com/0xtbug/zero-limit)
+**Limitations:** No streaming, no temperature/top_p parameters, no image inputs. Best for simple chat completions where rate limits are the main concern.
 
-Windows desktop app built with Tauri + React for monitoring AI coding assistant quotas via CLIProxyAPI. Track usage across Gemini, Claude, OpenAI Codex, and Antigravity accounts with real-time dashboard, system tray integration, and one-click proxy control - no API keys needed.
+> **Note:** Model availability depends on which provider accounts are authenticated. Run `/v1/models` to see your current list.
 
-### [CPA-XXX Panel](https://github.com/ferretgeek/CPA-X)
+## Features
 
-A lightweight web admin panel for CLIProxyAPI with health checks, resource monitoring, real-time logs, auto-update, request statistics and pricing display. Supports one-click installation and systemd service.
+- **OpenAI-compatible API** — works with any OpenAI SDK or client
+- **Multi-provider routing** — single endpoint for Gemini, Claude, and GPT models
+- **Streaming & non-streaming** — both response modes supported
+- **Function calling / tools** — full tool use support
+- **Multimodal** — text and image inputs
+- **Multi-account load balancing** — round-robin across credentials
+- **Auto-retry** — 3 retries on 403/408/500/502/503/504
+- **Quota management** — auto-switches accounts on 429, falls back to preview models
+- **Hot-reload config** — edit `config.yaml` without restarting
 
-### [CLIProxyAPI Tray](https://github.com/kitephp/CLIProxyAPI_Tray)
+## Configuration
 
-A Windows tray application implemented using PowerShell scripts, without relying on any third-party libraries. The main features include: automatic creation of shortcuts, silent running, password management, channel switching (Main / Plus), and automatic downloading and updating.
+Configuration lives in `config.yaml` (hot-reloaded on save). Key settings:
 
-### [霖君](https://github.com/wangdabaoqq/LinJun)
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `port` | `8002` | HTTP listen port |
+| `api-keys` | `["empire-ai-gateway-key"]` | Keys that clients must provide |
+| `auth-dir` | `~/.cli-proxy-api` | Where OAuth credentials are stored |
+| `request-retry` | `3` | Retry count on server errors |
+| `quota-exceeded.switch-project` | `true` | Auto-switch accounts on 429 |
+| `quota-exceeded.switch-preview-model` | `true` | Fall back to preview models |
+| `routing.strategy` | `round-robin` | Credential selection strategy |
+| `debug` | `false` | Verbose debug logging |
 
-霖君 is a cross-platform desktop application for managing AI programming assistants, supporting macOS, Windows, and Linux systems. Unified management of Claude Code, Gemini CLI, OpenAI Codex, Qwen Code, and other AI coding tools, with local proxy for multi-account quota tracking and one-click configuration.
+Full config reference: [CLIProxyAPI Documentation](https://help.router-for.me/hands-on/tutorial-0.html)
 
-### [CLIProxyAPI Dashboard](https://github.com/itsmylife44/cliproxyapi-dashboard)
+## Management
 
-A modern web-based management dashboard for CLIProxyAPI built with Next.js, React, and PostgreSQL. Features real-time log streaming, structured configuration editing, API key management, OAuth provider integration for Claude/Gemini/Codex, usage analytics, container management, and config sync with OpenCode via companion plugin - no manual YAML editing needed.
+### Web UI
 
-> [!NOTE]  
-> If you developed a project based on CLIProxyAPI, please open a PR to add it to this list.
+```
+http://localhost:8002/management.html
+```
 
-## More choices
+Login with management key `empire` to:
 
-Those projects are ports of CLIProxyAPI or inspired by it:
+- Add/remove provider accounts
+- View usage statistics
+- Monitor account health
 
-### [9Router](https://github.com/decolua/9router)
+### Management API
 
-A Next.js implementation inspired by CLIProxyAPI, easy to install and use, built from scratch with format translation (OpenAI/Claude/Gemini/Ollama), combo system with auto-fallback, multi-account management with exponential backoff, a Next.js web dashboard, and support for CLI tools (Cursor, Claude Code, Cline, RooCode) - no API keys needed.
+```bash
+# Get config
+curl -H "Authorization: Bearer empire" http://localhost:8002/v0/management/config
 
-> [!NOTE]  
-> If you have developed a port of CLIProxyAPI or a project inspired by it, please open a PR to add it to this list.
+# List auth files
+curl -H "Authorization: Bearer empire" http://localhost:8002/v0/management/auth-files
 
-## License
+# View usage
+curl -H "Authorization: Bearer empire" http://localhost:8002/v0/management/usage
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Troubleshooting
+
+### `unknown provider for model X`
+
+You're using a model name that doesn't match any configured provider. Check available models with `/v1/models`.
+
+### `502 Bad Gateway`
+
+The gateway can't route to a provider. Verify credentials are valid in the management UI.
+
+### No response / hanging requests
+
+Use non-streaming mode or Python `urllib`/`requests` for testing. Some `curl` configurations wait for streaming chunks indefinitely. Always add `--max-time` for safety.
+
+### Refresh credentials
+
+Credentials auto-refresh every 15 minutes. To force a refresh, restart the gateway or re-authenticate via the management UI.
+
+## Upstream
+
+Based on [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) v6.8.21 by [router-for-me](https://github.com/router-for-me).
+Full documentation: [https://help.router-for.me/](https://help.router-for.me/)

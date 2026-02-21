@@ -40,3 +40,6 @@
 - Python test suite (`tests/`)
 - Python build config (`pyproject.toml`)
 - Custom Dockerfile (replaced by CLIProxyAPI's Go-based Dockerfile)
+
+## 2026-02-21
+- chore: workspace sync checkpoint and gitignore audit (2026-02-21)

@@ -165,7 +165,24 @@ Routes through the ChatGPT macOS desktop app via [MackingJAI](https://github.com
 | `chatgpt` | GPT-5 via ChatGPT desktop (no rate limits) |
 | `chatgpt-unlimited` | GPT-5 via ChatGPT desktop (alias) |
 
-**Limitations:** No streaming, no temperature/top_p parameters, no image inputs. Best for simple chat completions where rate limits are the main concern.
+**How model routing works:** ChatGPT's desktop app auto-routes all requests to GPT-5. There is no way to select specific model variants (e.g. `fast`, `thinking`) or legacy models (o3, gpt-4o) — the ChatGPT Shortcut integration does not expose model selection. Both `chatgpt` and `chatgpt-unlimited` are aliases that map to `GPT-5` and behave identically.
+
+#### MackingJAI vs Codex OAuth
+
+| | MackingJAI (`chatgpt`) | Codex OAuth (`gpt-5`, `gpt-5-codex`, etc.) |
+|---|---|---|
+| **Rate limits** | None (uses subscription) | Standard API limits |
+| **Model control** | Auto-routed to GPT-5 only | Exact variant selection |
+| **Parameters** | No temp/top_p/penalties | Full parameter control |
+| **Streaming** | Not supported | Supported |
+| **Image inputs** | Not supported | Supported |
+| **Function calling** | Not supported | Supported |
+| **Speed** | Slower (Shortcut overhead) | Faster (direct API) |
+| **Best for** | Bulk/batch work, avoiding rate limits | Production use, precise control |
+
+**When to use `chatgpt`:** Batch processing, bulk requests, or any workload where API rate limits are the bottleneck and you don't need streaming, function calling, or fine-grained model control.
+
+**When to use Codex models:** Production services, real-time applications, or any workload requiring streaming, exact model selection, tool use, or parameter tuning.
 
 > **Note:** Model availability depends on which provider accounts are authenticated. Run `/v1/models` to see your current list.
 

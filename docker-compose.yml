@@ -16,7 +16,7 @@ services:
       DEPLOY: ${DEPLOY:-}
     ports:
       - "8317:8317"
-      - "8085:8085"
+      - "8086:8085"  # shifted from host 8085 to avoid collision with Heber catalog API
       - "1455:1455"
       - "54545:54545"
       - "51121:51121"

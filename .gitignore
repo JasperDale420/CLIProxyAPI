@@ -51,3 +51,6 @@ _bmad-output/*
 
 # Aider
 .aider*
+.scannerwork/
+sonar_scan.log
+.env

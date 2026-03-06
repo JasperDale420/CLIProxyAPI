@@ -32,8 +32,8 @@ const (
 	iFlowOAuthClientSecret = "4Z3YjXycVsQvyGF1etiNlIBB4RsqSDtW"
 )
 
-// DefaultAPIBaseURL is the canonical chat completions endpoint.
-const DefaultAPIBaseURL = "https://apis.iflow.cn/v1"
+// DefaultAPIBaseURL is the canonical z.ai OpenAI-compatible base URL for chat completions.
+const DefaultAPIBaseURL = "https://api.z.ai/api/paas/v4"
 
 // SuccessRedirectURL is exposed for consumers needing the official success page.
 const SuccessRedirectURL = iFlowSuccessRedirectURL

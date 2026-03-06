@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.3] - 2026-03-05
+
+### Changed
+
+- Updated the default GLM/z.ai OpenAI-compatible base URL to `https://api.z.ai/api/paas/v4`
+- Updated local GLM provider config to use the current z.ai production host instead of the legacy BigModel host
+
+### Fixed
+
+- Added a regression test that guards the built-in iFlow/GLM default API base URL against drifting away from the current z.ai endpoint
+
 ## [1.0.2] - 2026-02-18
 
 ### Changed

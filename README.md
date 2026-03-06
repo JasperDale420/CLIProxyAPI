@@ -154,6 +154,20 @@ Authenticated via Apple OAuth. Routes to OpenAI GPT models.
 | `gpt-5.3-codex` | GPT-5.3 Codex |
 | `gpt-5.3-codex-spark` | GPT-5.3 Codex Spark |
 
+### Zhipu GLM Coding Plan
+
+Routes through the official GLM coding endpoint. This is the correct path for Z.ai / BigModel coding-plan API keys.
+
+| Model ID | Description |
+|----------|-------------|
+| `glm-4.5` | GLM 4.5 |
+| `glm-4.5-air` | GLM 4.5 Air |
+| `glm-4.6` | GLM 4.6 |
+| `glm-4.7` | GLM 4.7 |
+| `glm-5` | GLM 5 |
+
+`glm-4.7-flash` and other flash/vision variants are not advertised in this gateway config because the coding endpoint does not expose them in `/models`.
+
 ### MackingJAI (ChatGPT Desktop App)
 
 Routes through the ChatGPT macOS desktop app via [MackingJAI](https://github.com/0ssamaak0/MackingJAI). **No rate limits** — uses your ChatGPT subscription directly.

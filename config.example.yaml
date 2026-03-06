@@ -178,6 +178,21 @@ nonstream-keepalive-interval: 0
 #     models: # The models supported by the provider.
 #       - name: "moonshotai/kimi-k2:free" # The actual model name.
 #         alias: "kimi-k2" # The alias used in the API.
+#   - name: "glm-coding"
+#     base-url: "https://api.z.ai/api/coding/paas/v4" # Z.ai / BigModel coding-plan endpoint
+#     api-key-entries:
+#       - api-key: "your-glm-coding-plan-key"
+#     models:
+#       - name: "glm-4.5"
+#         alias: "glm-4.5"
+#       - name: "glm-4.5-air"
+#         alias: "glm-4.5-air"
+#       - name: "glm-4.6"
+#         alias: "glm-4.6"
+#       - name: "glm-4.7"
+#         alias: "glm-4.7"
+#       - name: "glm-5"
+#         alias: "glm-5"
 
 # Vertex API keys (Vertex-compatible endpoints, use API key + base URL)
 # vertex-api-key:

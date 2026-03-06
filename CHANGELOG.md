@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Switched the built-in GLM provider from the general Z.ai API endpoint to the Z.ai coding endpoint so gateway traffic matches Coding Plan subscriptions.
+- Reduced the advertised GLM model list to the coding-endpoint models exposed by `/models`: `glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, and `glm-5`.
+- Updated the README model reference to document the coding-endpoint GLM routing behavior.
+
 ## [1.0.3] - 2026-03-05
 
 ### Changed

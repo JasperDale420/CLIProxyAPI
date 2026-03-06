@@ -166,7 +166,7 @@ Routes through the official GLM coding endpoint. This is the correct path for Z.
 | `glm-4.7` | GLM 4.7 |
 | `glm-5` | GLM 5 |
 
-`glm-4.7-flash` and other flash/vision variants are not advertised in this gateway config because the coding endpoint does not expose them in `/models`.
+Flash and vision variants are not advertised in this gateway config because the coding endpoint does not expose them in `/models`.
 
 ### MackingJAI (ChatGPT Desktop App)
 

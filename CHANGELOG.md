@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Ignore local cache/editor/runtime artifacts in .gitignore to reduce uncommitted noise.
+
+
 ## [Unreleased]
 
 ### Changed

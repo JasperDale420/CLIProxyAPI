@@ -54,3 +54,4 @@ _bmad-output/*
 .scannerwork/
 sonar_scan.log
 .env
+.pytest_cache

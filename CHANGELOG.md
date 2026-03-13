@@ -4,6 +4,13 @@
 
 ### Fixed
 - Ignore local cache/editor/runtime artifacts in .gitignore to reduce uncommitted noise.
+- Fixed data race in `GetContextWithCancel`: the background goroutine that watches for request context cancellation now captures the cancellable context by parameter instead of closure, preventing a race with the subsequent `context.WithValue` reassignments.
+- Fixed data race in `TestPersistConfigAndAuthAsyncInvokePersister`: `stubStore.lastAuthMessage` and `lastAuthPaths` are now protected by a mutex, eliminating an unsynchronized cross-goroutine read/write.
+- Fixed data race in `TestScheduleConfigReloadDebounces`: test now reads `w.lastConfigHash` under `clientsMutex.RLock()`, consistent with the protection used by production code.
+
+### Changed
+- Synced this repo to upstream CLIProxyAPI `v6.8.51` from `v6.8.21` and refreshed connection handling, including Antigravity transport and cancellation fixes.
+- Updated `README.md` and `config.example.yaml` for the v6.8.51 baseline.
 
 
 ## [Unreleased]

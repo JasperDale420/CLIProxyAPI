@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- Preflight check 2026-03-15: `go build ./...`, `go vet ./...`, and `go test ./...` all pass with no errors. All 18 test packages with test files pass (cached). No fixes required.
+
 ### Fixed
 - Ignore local cache/editor/runtime artifacts in .gitignore to reduce uncommitted noise.
 - Fixed data race in `GetContextWithCancel`: the background goroutine that watches for request context cancellation now captures the cancellable context by parameter instead of closure, preventing a race with the subsequent `context.WithValue` reassignments.

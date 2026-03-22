@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Fixed
+- Added `gpt-4o-mini` model alias (routed to deepseek-chat) to eliminate 502 errors from the Claude Code CLI's session-title requests. The CLI internally uses `gpt-4o-mini` for automatic session naming; without a route the gateway returned "unknown provider for model gpt-4o-mini" on every Hippocrates agent invocation.
+
 ### Changed
 - Scheduled maintenance check 2026-03-20: `go build ./...`, `go test ./...`, and `go test -race ./...` all pass with zero errors or data races. All test packages with test files pass. No code-level fixes required.
 - Preflight check 2026-03-15: `go build ./...`, `go vet ./...`, and `go test ./...` all pass with no errors. All 18 test packages with test files pass (cached). No fixes required.

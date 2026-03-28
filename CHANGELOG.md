@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Fixed
+- Re-routed `gpt-4o-mini` alias from the DeepSeek provider (expired key, returning 401 on every request) to the GLM provider using `glm-4.5-air`. This eliminates the recurring 401 "Authentication Fails" errors logged by the Claude Code session titler. The DeepSeek key `k-bc7e335574f947...eac6` is invalid and all requests to it have been failing since at least 2026-03-27.
 - Added `gpt-4o-mini` model alias (routed to deepseek-chat) to eliminate 502 errors from the Claude Code CLI's session-title requests. The CLI internally uses `gpt-4o-mini` for automatic session naming; without a route the gateway returned "unknown provider for model gpt-4o-mini" on every Hippocrates agent invocation.
 
 ### Changed

@@ -15,6 +15,7 @@ services:
     environment:
       DEPLOY: ${DEPLOY:-}
     ports:
+      - "8002:8002"   # OpenAI-compatible API (used by OpenClaw and Empire services on host)
       - "8317:8317"
       - "8086:8085"  # shifted from host 8085 to avoid collision with Heber catalog API
       - "1455:1455"

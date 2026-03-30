@@ -1,6 +1,6 @@
 # Empire AI Gateway
 
-Unified LLM proxy powered by [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (v6.8.21). Provides a single OpenAI-compatible API endpoint for routing requests to multiple LLM providers using OAuth-authenticated CLI credentials.
+Unified LLM proxy powered by [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (v6.8.51). Provides a single OpenAI-compatible API endpoint for routing requests to multiple LLM providers using OAuth-authenticated CLI credentials.
 
 ## Quick Start
 
@@ -276,5 +276,5 @@ Credentials auto-refresh every 15 minutes. To force a refresh, restart the gatew
 
 ## Upstream
 
-Based on [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) v6.8.21 by [router-for-me](https://github.com/router-for-me).
+Based on [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) v6.8.51 by [router-for-me](https://github.com/router-for-me).
 Full documentation: [https://help.router-for.me/](https://help.router-for.me/)

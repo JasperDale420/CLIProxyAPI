@@ -338,19 +338,18 @@ func (h *BaseAPIHandler) GetContextWithCancel(handler interfaces.APIHandler, c *
 			parentCtx = logging.WithRequestID(parentCtx, requestID)
 		}
 	}
-	cancelCtx, cancel := context.WithCancel(parentCtx)
+	newCtx, cancel := context.WithCancel(parentCtx)
+	cancelCtx := newCtx
 	if requestCtx != nil && requestCtx != parentCtx {
-		// Capture cancelCtx by value so the goroutine does not race with the
-		// context.WithValue reassignments that follow below.
-		go func(watchCtx context.Context) {
+		go func() {
 			select {
 			case <-requestCtx.Done():
 				cancel()
-			case <-watchCtx.Done():
+			case <-cancelCtx.Done():
 			}
-		}(cancelCtx)
+		}()
 	}
-	newCtx := context.WithValue(cancelCtx, "gin", c)
+	newCtx = context.WithValue(newCtx, "gin", c)
 	newCtx = context.WithValue(newCtx, "handler", handler)
 	return newCtx, func(params ...interface{}) {
 		if h.Cfg.RequestLog && len(params) == 1 {

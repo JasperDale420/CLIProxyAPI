@@ -3,8 +3,14 @@
 ## Unreleased
 
 ### Fixed
-- Re-routed `gpt-4o-mini` alias from the DeepSeek provider (expired key, returning 401 on every request) to the GLM provider using `glm-4.5-air`. This eliminates the recurring 401 "Authentication Fails" errors logged by the Claude Code session titler. The DeepSeek key `k-bc7e335574f947...eac6` is invalid and all requests to it have been failing since at least 2026-03-27.
-- Added `gpt-4o-mini` model alias (routed to deepseek-chat) to eliminate 502 errors from the Claude Code CLI's session-title requests. The CLI internally uses `gpt-4o-mini` for automatic session naming; without a route the gateway returned "unknown provider for model gpt-4o-mini" on every Hippocrates agent invocation.
+- Removed 5 unreachable duplicate `return` statements in token-count paths across `antigravity_executor.go`, `gemini_cli_executor.go`, `gemini_executor.go`, and `gemini_vertex_executor.go` (flagged by `go vet`). Logic is unchanged — the reachable return already used the correct `[]byte` value.
+
+### Changed
+- Synced upstream CLIProxyAPI from `v6.8.51` to `v6.9.6` — 63 merge conflicts resolved across 238 files. Upstream adds weighted provider rotation, Claude max_tokens defaults, Codex capacity error retries, batch auth file upload/delete, auth file name validation (security), and FreeBSD build support.
+
+### Removed
+- Removed `gpt-4o-mini` model alias from GLM provider config.
+- Removed `deepseek-coder` alias — this model does not exist in DeepSeek's API.
 
 ### Changed
 - Scheduled maintenance check 2026-03-20: `go build ./...`, `go test ./...`, and `go test -race ./...` all pass with zero errors or data races. All test packages with test files pass. No code-level fixes required.

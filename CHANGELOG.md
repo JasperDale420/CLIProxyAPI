@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- Updated GLM Pro model version reference from `GLM-5` to `GLM-5.1` in README.md and README_JA.md to reflect the current upstream model name.
+
 ### Fixed
 - Removed 5 unreachable duplicate `return` statements in token-count paths across `antigravity_executor.go`, `gemini_cli_executor.go`, `gemini_executor.go`, and `gemini_vertex_executor.go` (flagged by `go vet`). Logic is unchanged — the reachable return already used the correct `[]byte` value.
 

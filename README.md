@@ -59,6 +59,7 @@ From the management UI you can:
 - Add **Codex** accounts (Apple OAuth → OpenAI GPT models)
 - Add **Claude Code** accounts (Anthropic OAuth)
 - Add **Gemini CLI** accounts (Google OAuth)
+- Add **xAI/Grok** accounts (xAI OAuth)
 - View usage statistics and account status
 
 To add accounts via CLI instead:
@@ -68,6 +69,7 @@ To add accounts via CLI instead:
 ./cli-proxy-api --codex-login          # Codex (OpenAI GPT)
 ./cli-proxy-api --claude-login         # Claude Code
 ./cli-proxy-api --gemini-login         # Gemini CLI
+./cli-proxy-api --xai-login            # xAI/Grok
 ```
 
 ## Making Requests
@@ -152,15 +154,17 @@ Authenticated via Google OAuth. Routes to Google, Anthropic, and OpenAI models t
 
 | Model ID | Description |
 |----------|-------------|
-| `gemini-3-pro-high` | Gemini 3 Pro (high quality) |
-| `gemini-3-pro-image` | Gemini 3 Pro with image generation |
-| `gemini-3-flash` | Gemini 3 Flash (fast) |
-| `gemini-2.5-flash` | Gemini 2.5 Flash |
-| `gemini-2.5-flash-lite` | Gemini 2.5 Flash Lite (fastest) |
-| `claude-sonnet-4-6` | Claude Sonnet 4.6 |
-| `claude-sonnet-4-5` | Claude Sonnet 4.5 |
-| `claude-sonnet-4-5-thinking` | Claude Sonnet 4.5 with extended thinking |
 | `claude-opus-4-6-thinking` | Claude Opus 4.6 with extended thinking |
+| `claude-sonnet-4-6` | Claude Sonnet 4.6 with extended thinking |
+| `gemini-3-flash-agent` | Gemini 3.5 Flash agent |
+| `gemini-3-pro-high` | Gemini 3 Pro (high quality) |
+| `gemini-3-pro-low` | Gemini 3 Pro (low latency) |
+| `gemini-3-flash` | Gemini 3 Flash (fast) |
+| `gemini-3.1-flash-image` | Gemini 3.1 Flash Image |
+| `gemini-pro-agent` | Gemini 3.1 Pro agent |
+| `gemini-3.1-pro-low` | Gemini 3.1 Pro (low latency) |
+| `gemini-3.1-flash-lite` | Gemini 3.1 Flash Lite |
+| `gemini-3.5-flash-low` | Gemini 3.5 Flash (low latency) |
 | `gpt-oss-120b-medium` | GPT OSS 120B |
 
 ### Codex Provider (OpenAI)
@@ -169,17 +173,30 @@ Authenticated via Apple OAuth. Routes to OpenAI GPT models.
 
 | Model ID | Description |
 |----------|-------------|
-| `gpt-5` | GPT-5 |
-| `gpt-5-codex` | GPT-5 Codex |
-| `gpt-5-codex-mini` | GPT-5 Codex Mini |
-| `gpt-5.1` | GPT-5.1 |
-| `gpt-5.1-codex` | GPT-5.1 Codex |
-| `gpt-5.1-codex-mini` | GPT-5.1 Codex Mini |
-| `gpt-5.1-codex-max` | GPT-5.1 Codex Max |
 | `gpt-5.2` | GPT-5.2 |
-| `gpt-5.2-codex` | GPT-5.2 Codex |
 | `gpt-5.3-codex` | GPT-5.3 Codex |
 | `gpt-5.3-codex-spark` | GPT-5.3 Codex Spark |
+| `gpt-5.4` | GPT-5.4 |
+| `gpt-5.4-mini` | GPT-5.4 Mini |
+| `gpt-5.5` | GPT-5.5 |
+| `codex-auto-review` | Codex Auto Review |
+
+### xAI/Grok Provider
+
+Authenticated via xAI OAuth. Routes to Grok Build and Grok models.
+
+| Model ID | Description |
+|----------|-------------|
+| `grok-build-0.1` | Grok Build 0.1 |
+| `grok-4.3` | Grok 4.3 |
+| `grok-4.20-0309-reasoning` | Grok 4.20 reasoning |
+| `grok-4.20-0309-non-reasoning` | Grok 4.20 non-reasoning |
+| `grok-4.20-multi-agent-0309` | Grok 4.20 multi-agent |
+| `grok-3-mini` | Grok 3 Mini |
+| `grok-3-mini-fast` | Grok 3 Mini Fast |
+| `grok-imagine-image` | Grok Imagine Image |
+| `grok-imagine-image-quality` | Grok Imagine Image Quality |
+| `grok-imagine-video` | Grok Imagine Video |
 
 ### Zhipu GLM Coding Plan
 

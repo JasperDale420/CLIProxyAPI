@@ -7,9 +7,11 @@
 - Refreshed the embedded model catalog with current Codex Pro, Antigravity, Gemini, and xAI/Grok model definitions.
 - Updated the Empire README model reference for the current Codex, Antigravity, and xAI/Grok model IDs.
 - Updated GLM Pro model version reference from `GLM-5` to `GLM-5.1` in README.md and README_JA.md to reflect the current upstream model name.
+- Added `glm-5.2` to the advertised Z.ai GLM Coding Plan model list, README variants, and example config.
 
 ### Fixed
 - Added model-catalog regression tests so missing current Codex, Gemini/Antigravity, or xAI/Grok models fail fast.
+- Added a regression test that keeps `glm-5.2` advertised in the Z.ai docs/config surfaces.
 - Renamed the file-backed request body merge helper so `go vet` no longer mistakes it for an invalid `io.WriterTo` implementation.
 - Removed the stale iFlow auth test after the upstream v7 line removed the iFlow provider package.
 - Removed 5 unreachable duplicate `return` statements in token-count paths across `antigravity_executor.go`, `gemini_cli_executor.go`, `gemini_executor.go`, and `gemini_vertex_executor.go` (flagged by `go vet`). Logic is unchanged — the reachable return already used the correct `[]byte` value.

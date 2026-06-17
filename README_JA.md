@@ -14,7 +14,7 @@ OAuth経由でOpenAI Codex（GPTモデル）およびClaude Codeもサポート�
 
 本プロジェクトはZ.aiにスポンサーされており、GLM CODING PLANの提供を受けています。
 
-GLM CODING PLANはAIコーディング向けに設計されたサブスクリプションサービスで、月額わずか$10から利用可能です。フラッグシップのGLM-4.7および（GLM-5.1はProユーザーのみ利用可能）モデルを10以上の人気AIコーディングツール（Claude Code、Cline、Roo Codeなど）で利用でき、開発者にトップクラスの高速かつ安定したコーディング体験を提供します。
+GLM CODING PLANはAIコーディング向けに設計されたサブスクリプションサービスで、月額わずか$10から利用可能です。GLM-4.7およびフラッグシップのGLM-5.2モデルを10以上の人気AIコーディングツール（Claude Code、Cline、Roo Codeなど）で利用でき、開発者にトップクラスの高速かつ安定したコーディング体験を提供します。
 
 GLM CODING PLANを10%割引で取得：https://z.ai/subscribe?ic=8JVLJQFSKB
 

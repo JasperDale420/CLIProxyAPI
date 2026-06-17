@@ -18,7 +18,7 @@ The gateway listens on **port 8002** and exposes an OpenAI-compatible API.
 
 ### API Key
 
-GLM CODING PLAN is a subscription service designed for AI coding, starting at just $10/month. It provides access to their flagship GLM-4.7 & （GLM-5.1 Only Available  for Pro Users）model across 10+ popular AI coding tools (Claude Code, Cline, Roo Code, etc.), offering developers top-tier, fast, and stable coding experiences.
+GLM CODING PLAN is a subscription service designed for AI coding, starting at just $10/month. It provides access to GLM-4.7 and flagship GLM-5.2 models across 10+ popular AI coding tools (Claude Code, Cline, Roo Code, etc.), offering developers top-tier, fast, and stable coding experiences.
 
 ```
 Authorization: Bearer empire-ai-gateway-key
@@ -209,6 +209,7 @@ Routes through the official GLM coding endpoint. This is the correct path for Z.
 | `glm-4.6` | GLM 4.6 |
 | `glm-4.7` | GLM 4.7 |
 | `glm-5` | GLM 5 |
+| `glm-5.2` | GLM 5.2 |
 
 Flash and vision variants are not advertised in this gateway config because the coding endpoint does not expose them in `/models`.
 

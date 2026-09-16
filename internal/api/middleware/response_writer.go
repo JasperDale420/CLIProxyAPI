@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/router-for-me/CLIProxyAPI/v7/internal/interfaces"
 	"github.com/router-for-me/CLIProxyAPI/v7/internal/logging"
-	log "github.com/sirupsen/logrus"
 )
 
 const requestBodyOverrideContextKey = "REQUEST_BODY_OVERRIDE"
@@ -284,7 +283,7 @@ func (w *ResponseWriterWrapper) Finalize(c *gin.Context) error {
 	websocketTimelineSource := w.extractWebsocketTimelineSource(c)
 	apiWebsocketTimelineSource := w.extractAPIWebsocketTimelineSource(c)
 	if !w.logger.IsEnabled() && !forceLog {
-		cleanupFileBodySources(websocketTimelineSource, apiWebsocketTimelineSource)
+		logging.CleanupFileBodySources(websocketTimelineSource, apiWebsocketTimelineSource)
 		return nil
 	}
 
@@ -314,10 +313,10 @@ func (w *ResponseWriterWrapper) Finalize(c *gin.Context) error {
 		var errMerge error
 		apiWebsocketTimeline, errMerge = mergeFileBodySource(apiWebsocketTimeline, apiWebsocketTimelineSource)
 		if errMerge != nil {
-			cleanupFileBodySources(websocketTimelineSource)
+			logging.CleanupFileBodySources(websocketTimelineSource)
 			return errMerge
 		}
-		cleanupFileBodySources(websocketTimelineSource)
+		logging.CleanupFileBodySources(websocketTimelineSource)
 		if len(apiWebsocketTimeline) > 0 {
 			_ = w.streamWriter.WriteAPIWebsocketTimeline(apiWebsocketTimeline)
 		}
@@ -462,7 +461,7 @@ func extractBodyOverride(c *gin.Context, key string) []byte {
 
 func (w *ResponseWriterWrapper) logRequest(requestBody []byte, statusCode int, headers map[string][]string, body, websocketTimeline []byte, websocketTimelineSource *logging.FileBodySource, apiRequestBody, apiResponseBody, apiWebsocketTimeline []byte, apiWebsocketTimelineSource *logging.FileBodySource, apiResponseTimestamp time.Time, apiResponseErrors []*interfaces.ErrorMessage, forceLog bool) error {
 	if w.requestInfo == nil {
-		cleanupFileBodySources(websocketTimelineSource, apiWebsocketTimelineSource)
+		logging.CleanupFileBodySources(websocketTimelineSource, apiWebsocketTimelineSource)
 		return nil
 	}
 
@@ -494,7 +493,7 @@ func (w *ResponseWriterWrapper) logRequest(requestBody []byte, statusCode int, h
 	var errMerge error
 	websocketTimeline, errMerge = mergeFileBodySource(websocketTimeline, websocketTimelineSource)
 	if errMerge != nil {
-		cleanupFileBodySources(apiWebsocketTimelineSource)
+		logging.CleanupFileBodySources(apiWebsocketTimelineSource)
 		return errMerge
 	}
 	apiWebsocketTimeline, errMerge = mergeFileBodySource(apiWebsocketTimeline, apiWebsocketTimelineSource)
@@ -548,7 +547,7 @@ func mergeFileBodySource(payload []byte, source *logging.FileBodySource) ([]byte
 	if source == nil {
 		return payload, nil
 	}
-	defer cleanupFileBodySources(source)
+	defer logging.CleanupFileBodySources(source)
 	if !source.HasPayload() {
 		return payload, nil
 	}
@@ -564,15 +563,4 @@ func mergeFileBodySource(payload []byte, source *logging.FileBodySource) ([]byte
 		return nil, errWrite
 	}
 	return buf.Bytes(), nil
-}
-
-func cleanupFileBodySources(sources ...*logging.FileBodySource) {
-	for _, source := range sources {
-		if source == nil {
-			continue
-		}
-		if errCleanup := source.Cleanup(); errCleanup != nil {
-			log.WithError(errCleanup).Warn("failed to clean up log part files")
-		}
-	}
 }

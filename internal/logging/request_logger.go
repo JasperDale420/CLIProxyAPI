@@ -240,7 +240,11 @@ func (s *FileBodySource) Cleanup() error {
 	return firstErr
 }
 
-func cleanupFileBodySources(sources ...*FileBodySource) {
+// CleanupFileBodySources removes the backing files for the given file-backed
+// body sources, logging (rather than returning) any cleanup failure. Nil
+// sources are skipped. Exported so other packages that hold a *FileBodySource
+// (e.g. internal/api/middleware) can reuse this logic instead of duplicating it.
+func CleanupFileBodySources(sources ...*FileBodySource) {
 	for _, source := range sources {
 		if source == nil {
 			continue
@@ -533,7 +537,7 @@ func (l *FileRequestLogger) LogRequestWithOptionsAndSources(url, method string, 
 }
 
 func (l *FileRequestLogger) logRequestWithSources(url, method string, requestHeaders map[string][]string, body []byte, statusCode int, responseHeaders map[string][]string, response, websocketTimeline []byte, websocketTimelineSource *FileBodySource, apiRequest, apiResponse, apiWebsocketTimeline []byte, apiWebsocketTimelineSource *FileBodySource, apiResponseErrors []*interfaces.ErrorMessage, force bool, requestID string, requestTimestamp, apiResponseTimestamp time.Time) error {
-	defer cleanupFileBodySources(websocketTimelineSource, apiWebsocketTimelineSource)
+	defer CleanupFileBodySources(websocketTimelineSource, apiWebsocketTimelineSource)
 
 	if !l.enabled && !force {
 		return nil

@@ -121,11 +121,6 @@ func DetectSignatureProviderForBlock(rawSignature string, blockKind SignatureBlo
 	return SignatureProviderUnknown
 }
 
-func IsSignatureCompatibleWithProvider(targetProvider SignatureProvider, rawSignature string) bool {
-	decision := DecideSignatureCompatibility(targetProvider, rawSignature, SignatureBlockKindUnknown)
-	return decision.Compatible
-}
-
 // DecideSignatureCompatibility returns the safe handling policy for replaying a
 // signed block into targetProvider.
 func DecideSignatureCompatibility(targetProvider SignatureProvider, rawSignature string, blockKind SignatureBlockKind) SignatureCompatibilityDecision {

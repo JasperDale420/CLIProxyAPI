@@ -770,14 +770,6 @@ func (e *OpenAICompatExecutor) resolveCompatConfig(auth *cliproxyauth.Auth) *con
 	return nil
 }
 
-func (e *OpenAICompatExecutor) overrideModel(payload []byte, model string) []byte {
-	if len(payload) == 0 || model == "" {
-		return payload
-	}
-	payload, _ = sjson.SetBytes(payload, "model", model)
-	return payload
-}
-
 type statusErr struct {
 	code       int
 	msg        string

@@ -517,16 +517,18 @@ func extractGeminiConfig(body []byte, provider string) ThinkingConfig {
 	return ThinkingConfig{}
 }
 
-// extractOpenAIConfig extracts thinking configuration from OpenAI format request body.
+// extractEffortConfig extracts a level-based thinking configuration from a
+// request body at the given gjson path. OpenAI and Codex both use discrete
+// reasoning-effort levels ("none", "low", "medium", "high") with no numeric
+// budget support; they differ only in where the effort field lives in the
+// body, so this shared helper is parameterized on that path.
 //
-// OpenAI API format:
-//   - reasoning_effort: "none", "low", "medium", "high" (discrete levels)
+//   - OpenAI Chat Completions format: reasoning_effort
+//   - Codex / OpenAI Responses API format: reasoning.effort
 //
-// OpenAI uses level-based thinking configuration only, no numeric budget support.
 // The "none" value is treated specially to return ModeNone.
-func extractOpenAIConfig(body []byte) ThinkingConfig {
-	// Check reasoning_effort (OpenAI Chat Completions format)
-	if effort := gjson.GetBytes(body, "reasoning_effort"); effort.Exists() {
+func extractEffortConfig(body []byte, path string) ThinkingConfig {
+	if effort := gjson.GetBytes(body, path); effort.Exists() {
 		value := effort.String()
 		if value == "none" {
 			return ThinkingConfig{Mode: ModeNone, Budget: 0}
@@ -537,21 +539,12 @@ func extractOpenAIConfig(body []byte) ThinkingConfig {
 	return ThinkingConfig{}
 }
 
-// extractCodexConfig extracts thinking configuration from Codex format request body.
-//
-// Codex API format (OpenAI Responses API):
-//   - reasoning.effort: "none", "low", "medium", "high"
-//
-// This is similar to OpenAI but uses nested field "reasoning.effort" instead of "reasoning_effort".
-func extractCodexConfig(body []byte) ThinkingConfig {
-	// Check reasoning.effort (Codex / OpenAI Responses API format)
-	if effort := gjson.GetBytes(body, "reasoning.effort"); effort.Exists() {
-		value := effort.String()
-		if value == "none" {
-			return ThinkingConfig{Mode: ModeNone, Budget: 0}
-		}
-		return ThinkingConfig{Mode: ModeLevel, Level: ThinkingLevel(value)}
-	}
+// extractOpenAIConfig extracts thinking configuration from OpenAI format request body.
+func extractOpenAIConfig(body []byte) ThinkingConfig {
+	return extractEffortConfig(body, "reasoning_effort")
+}
 
-	return ThinkingConfig{}
+// extractCodexConfig extracts thinking configuration from Codex format request body.
+func extractCodexConfig(body []byte) ThinkingConfig {
+	return extractEffortConfig(body, "reasoning.effort")
 }

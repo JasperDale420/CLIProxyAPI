@@ -27,12 +27,22 @@ func ComputeOpenAICompatModelsHash(models []config.OpenAICompatibilityModel) str
 	return hashJoined(keys)
 }
 
-// ComputeVertexCompatModelsHash returns a stable hash for Vertex-compatible models.
-func ComputeVertexCompatModelsHash(models []config.VertexCompatModel) string {
+// namedAliasModel is implemented by the config model types that carry a plain
+// upstream Name and a client-facing Alias, letting their hash computation
+// share one implementation instead of four copy-pasted loops.
+type namedAliasModel interface {
+	GetName() string
+	GetAlias() string
+}
+
+// computeNamedAliasModelsHash returns a stable hash over the normalized
+// name/alias pairs of models. Shared by the Compute*ModelsHash helpers below
+// whose models differ only in type, not in which fields feed the hash.
+func computeNamedAliasModelsHash[T namedAliasModel](models []T) string {
 	keys := normalizeModelPairs(func(out func(key string)) {
 		for _, model := range models {
-			name := strings.TrimSpace(model.Name)
-			alias := strings.TrimSpace(model.Alias)
+			name := strings.TrimSpace(model.GetName())
+			alias := strings.TrimSpace(model.GetAlias())
 			if name == "" && alias == "" {
 				continue
 			}
@@ -40,51 +50,26 @@ func ComputeVertexCompatModelsHash(models []config.VertexCompatModel) string {
 		}
 	})
 	return hashJoined(keys)
+}
+
+// ComputeVertexCompatModelsHash returns a stable hash for Vertex-compatible models.
+func ComputeVertexCompatModelsHash(models []config.VertexCompatModel) string {
+	return computeNamedAliasModelsHash(models)
 }
 
 // ComputeClaudeModelsHash returns a stable hash for Claude model aliases.
 func ComputeClaudeModelsHash(models []config.ClaudeModel) string {
-	keys := normalizeModelPairs(func(out func(key string)) {
-		for _, model := range models {
-			name := strings.TrimSpace(model.Name)
-			alias := strings.TrimSpace(model.Alias)
-			if name == "" && alias == "" {
-				continue
-			}
-			out(strings.ToLower(name) + "|" + strings.ToLower(alias))
-		}
-	})
-	return hashJoined(keys)
+	return computeNamedAliasModelsHash(models)
 }
 
 // ComputeCodexModelsHash returns a stable hash for Codex model aliases.
 func ComputeCodexModelsHash(models []config.CodexModel) string {
-	keys := normalizeModelPairs(func(out func(key string)) {
-		for _, model := range models {
-			name := strings.TrimSpace(model.Name)
-			alias := strings.TrimSpace(model.Alias)
-			if name == "" && alias == "" {
-				continue
-			}
-			out(strings.ToLower(name) + "|" + strings.ToLower(alias))
-		}
-	})
-	return hashJoined(keys)
+	return computeNamedAliasModelsHash(models)
 }
 
 // ComputeGeminiModelsHash returns a stable hash for Gemini model aliases.
 func ComputeGeminiModelsHash(models []config.GeminiModel) string {
-	keys := normalizeModelPairs(func(out func(key string)) {
-		for _, model := range models {
-			name := strings.TrimSpace(model.Name)
-			alias := strings.TrimSpace(model.Alias)
-			if name == "" && alias == "" {
-				continue
-			}
-			out(strings.ToLower(name) + "|" + strings.ToLower(alias))
-		}
-	})
-	return hashJoined(keys)
+	return computeNamedAliasModelsHash(models)
 }
 
 // ComputeExcludedModelsHash returns a normalized hash for excluded model lists.
